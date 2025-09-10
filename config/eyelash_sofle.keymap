@@ -46,14 +46,79 @@
             bindings = <&soft_off>;
             key-positions = <14 28 40>;
         };
+
+        bowser_pre_tab {
+            bindings = <&bowser_pre_tab>;
+            key-positions = <34 35>;
+        };
+
+        bowser_next_tab {
+            bindings = <&bowser_next_tab>;
+            key-positions = <35 36>;
+        };
+
+        bowser_go_back {
+            bindings = <&bowser_go_back>;
+            key-positions = <47 48>;
+        };
+
+        bowser_go_forward {
+            bindings = <&bowser_go_forward>;
+            key-positions = <48 49>;
+        };
+
+        pre_screen {
+            bindings = <&macos_pre>;
+            key-positions = <21 22>;
+        };
+
+        next_screen {
+            bindings = <&macos_next>;
+            key-positions = <22 23>;
+        };
     };
 
     macros {
-        pretab: pretab {
+        bowser_pre_tab: pretab {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             bindings = <&kp LG(LA(LEFT))>;
             label = "PRETAB";
+        };
+
+        bowser_next_tab: next_tab {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LG(LA(RIGHT))>;
+            label = "NEXT_TAB";
+        };
+
+        bowser_go_back: go_back {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LG(LEFT_BRACKET)>;
+            label = "GO_BACK";
+        };
+
+        bowser_go_forward: go_forward {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LG(RIGHT_BRACKET)>;
+            label = "GO_FORWARD";
+        };
+
+        macos_pre: macos_pre {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LC(LEFT_ARROW)>;
+            label = "MACOS_PRE";
+        };
+
+        macos_next: macos_next {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LC(RIGHT)>;
+            label = "MACOS_NEXT";
         };
     };
 
@@ -62,7 +127,7 @@
 
         layer0 {
             bindings = <
-&kp TILDE   &kp N1     &kp N2        &kp N3        &kp N4  &kp N5       &kp UP_ARROW     &kp N6         &kp N7       &kp N8     &kp N9     &kp N0     &none
+&kp TILDE   &kp N1     &kp N2        &kp N3        &kp N4  &kp N5       &kp UP_ARROW     &kp N6         &kp N7       &kp N8     &kp N9     &kp N0     &kp LEFT_ALT
 &kp TAB     &kp Q      &kp W         &kp E         &kp R   &kp T        &kp DOWN_ARROW   &kp Y          &kp U        &kp I      &kp O      &kp P      &kp BACKSPACE
 &kp CAPS    &kp A      &kp S         &kp D         &kp F   &kp G        &kp LEFT_ARROW   &kp H          &kp J        &kp K      &kp L      &kp SEMI   &mt RIGHT_ALT ENTER
 &kp LSHFT   &kp Z      &kp X         &kp C         &kp V   &kp B        &kp RIGHT_ARROW  &kp N          &kp M        &kp COMMA  &kp DOT    &kp FSLH   &kp APOS
@@ -75,7 +140,7 @@
 
         layer_1 {
             bindings = <
-&kp GRAVE    &kp F1     &kp F2     &kp F3     &kp F4     &kp F5       &mmv MOVE_UP     &kp F6  &kp F7     &kp F8    &kp F9     &kp F10  &trans
+&trans       &kp F1     &kp F2     &kp F3     &kp F4     &kp F5       &mmv MOVE_UP     &kp F6  &kp F7     &kp F8    &kp F9     &kp F10  &trans
 &kp LG(TAB)  &trans     &kp LG(W)  &trans     &kp LG(R)  &kp LG(T)    &mmv MOVE_DOWN   &trans  &mkp LCLK  &kp UP    &mkp RCLK  &trans   &trans
 &trans       &kp LG(A)  &kp LG(S)  &trans     &kp LG(F)  &kp LG(G)    &mmv MOVE_LEFT   &trans  &kp LEFT   &kp DOWN  &kp RIGHT  &trans   &trans
 &trans       &kp LG(Z)  &kp LG(X)  &kp LG(C)  &kp LG(V)  &kp LG(B)    &mmv MOVE_RIGHT  &trans  &trans     &trans    &trans     &trans   &trans
@@ -100,21 +165,23 @@
 
         layer_3 {
             bindings = <
-&trans        &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans          &trans          &trans          &trans  &trans
-&bt BT_SEL 0  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &mkp LCLK       &mmv MOVE_UP    &mkp RCLK       &trans  &trans
-&bt BT_SEL 1  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_LEFT  &trans  &trans
-&bt BT_SEL 2  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &pretab         &trans          &trans          &trans  &trans
-&trans        &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans          &trans          &trans          &trans
+&trans        &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans           &trans            &trans           &trans  &trans
+&bt BT_SEL 0  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &mkp LCLK        &mmv MOVE_UP      &mkp RCLK        &trans  &trans
+&bt BT_SEL 1  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &mmv MOVE_LEFT   &mmv MOVE_DOWN    &mmv MOVE_RIGHT  &trans  &trans
+&bt BT_SEL 2  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &bowser_pre_tab  &bowser_next_tab  &trans           &trans  &trans
+&trans        &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans           &trans            &trans           &trans
             >;
+
+            label = "Mouse";
         };
 
         layer_4 {
             bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+&trans     &trans           &trans       &trans     &trans          &trans             &trans  &trans            &trans             &trans        &trans                &trans                 &trans
+&kp GRAVE  &kp N1           &kp N2       &kp N3     &kp N4          &kp N5             &trans  &kp N6            &kp N7             &kp N8        &kp N9                &kp N0                 &trans
+&kp TILDE  &kp EXCLAMATION  &kp AT_SIGN  &kp HASH   &kp DOLLAR      &kp PERCENT        &trans  &kp CARET         &kp AMPERSAND      &kp ASTERISK  &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &trans
+&trans     &kp MINUS        &kp PLUS     &kp EQUAL  &kp LEFT_BRACE  &kp RIGHT_BRACE    &trans  &kp LEFT_BRACKET  &kp RIGHT_BRACKET  &trans        &trans                &trans                 &trans
+&trans     &trans           &trans       &trans     &trans          &trans             &trans  &trans            &trans             &trans        &trans                &trans
             >;
         };
     };
