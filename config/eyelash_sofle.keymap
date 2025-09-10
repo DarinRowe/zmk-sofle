@@ -165,11 +165,11 @@
 
         layer_3 {
             bindings = <
-&trans        &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans           &trans            &trans           &trans  &trans
-&bt BT_SEL 0  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &mkp LCLK        &mmv MOVE_UP      &mkp RCLK        &trans  &trans
-&bt BT_SEL 1  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &mmv MOVE_LEFT   &mmv MOVE_DOWN    &mmv MOVE_RIGHT  &trans  &trans
-&bt BT_SEL 2  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &bowser_pre_tab  &bowser_next_tab  &trans           &trans  &trans
-&trans        &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans           &trans            &trans           &trans
+&trans        &trans  &trans  &trans  &trans  &trans    &trans  &trans             &trans           &trans            &trans           &trans  &trans
+&bt BT_SEL 0  &trans  &trans  &trans  &trans  &trans    &trans  &mmv MOVE_Y(200)   &mkp LCLK        &mmv MOVE_UP      &mkp RCLK        &trans  &trans
+&bt BT_SEL 1  &trans  &trans  &trans  &trans  &trans    &trans  &mmv MOVE_Y(-200)  &mmv MOVE_LEFT   &mmv MOVE_DOWN    &mmv MOVE_RIGHT  &trans  &trans
+&bt BT_SEL 2  &trans  &trans  &trans  &trans  &trans    &trans  &trans             &bowser_pre_tab  &bowser_next_tab  &trans           &trans  &trans
+&trans        &trans  &trans  &trans  &trans  &trans    &trans  &trans             &trans           &trans            &trans           &trans
             >;
 
             label = "Mouse";
