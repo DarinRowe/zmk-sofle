@@ -9,10 +9,76 @@ on:
 
 jobs:
   draw:
-    uses: caksoylar/keymap-drawer/.github/workflows/draw-zmk.yml@main
+    runs-on: ubuntu-latest
     permissions:
       contents: write
-    with:
-      commit_message: "[Draw] ${{ github.event.head_commit.message }}"
-      destination: "commit"
-      fail_on_error: ${{ fromJSON(true) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install keymap-drawer
+        run: pipx install "keymap-drawer"
+
+      - name: Install west
+        run: pipx install west
+
+      - name: Fetch west modules
+        run: |
+          west init -l config
+          west config --local manifest.project-filter " -zmk,-zephyr"
+          west update --fetch-opt=--filter=tree:0
+
+      - name: Draw keymaps
+        run: |
+          shopt -s nullglob extglob
+          error_occurred=0
+          mkdir -p "keymap-drawer"
+
+          config_path="keymap_drawer.config.yaml"
+          [ -e "$config_path" ] && config_arg=(-c "$config_path") || config_arg=()
+          echo "INFO: using config args:" "${config_arg[@]}"
+
+          for keymap_file in config/*.keymap; do
+              keyboard=$(basename -s .keymap "$keymap_file")
+              echo "INFO: drawing for $keyboard"
+
+              draw_args=()
+              if [ -f "config/${keyboard}.json" ]; then
+                  echo "INFO:   found config/${keyboard}.json"
+                  draw_args+=(-j "config/${keyboard}.json")
+              else
+                  dts_candidates=({,*/}boards/*/*/${keyboard}-layout{,s}.dtsi)
+                  if [ ${#dts_candidates[@]} -gt 0 ]; then
+                      echo "INFO:   found ${dts_candidates[0]}"
+                      draw_args+=(-d "${dts_candidates[0]}")
+                  fi
+              fi
+
+              tmp_yaml=$(mktemp)
+              tmp_svg=$(mktemp)
+
+              if keymap "${config_arg[@]}" parse -z "$keymap_file" >"$tmp_yaml"; then
+                  mv "$tmp_yaml" "keymap-drawer/$keyboard.yaml"
+              else
+                  echo "ERROR: parsing failed for $keyboard!"
+                  error_occurred=1
+                  continue
+              fi
+
+              if keymap "${config_arg[@]}" draw "keymap-drawer/$keyboard.yaml" "${draw_args[@]}" >"$tmp_svg"; then
+                  mv "$tmp_svg" "keymap-drawer/$keyboard.svg"
+              else
+                  echo "ERROR: drawing failed for $keyboard!"
+                  error_occurred=1
+              fi
+          done
+
+          if [ $error_occurred -eq 1 ]; then
+              exit 1
+          fi
+
+      - name: Commit updated images
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          file_pattern: "keymap-drawer/*.svg keymap-drawer/*.yaml"
+          commit_message: "[Draw] ${{ github.event.head_commit.message }}"
